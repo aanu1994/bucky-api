@@ -13,18 +13,8 @@ app.get('/', (req, res) => {
     res.send('Welcome to the bucky api!!!!');
 });
 
-app.post('/clients', (req, res) => {
-    // res.send(
-    //     {
-    //         "result": {
-    //             "status": "success",
-    //             "detail": "Client Successfuly Created",
-    //             "clientAccountId": "1"
-    //         }
-    //     }
-    // );
-    
-    clientService.create();
+app.post('/clients', (req, res) => {    
+    res.send(clientService.create(req.body));
 });
 
 app.listen(process.env.PORT, () => {
