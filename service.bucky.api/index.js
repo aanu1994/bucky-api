@@ -1,7 +1,7 @@
 const express = require('express');
-const clientService = require('./services/client');
-
+const clientService = require('./repositories/client');
 const app = express();
+
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -14,10 +14,17 @@ app.get('/', (req, res) => {
 });
 
 app.post('/clients', (req, res) => {    
-    res.send(clientService.create(req.body));
+    clientService.create(req.body);
+
+    res.status(200).send(JSON.stringify({
+        "result": {
+            "status": "success",
+            "detail": "Client Successfuly Created"
+        }
+    }));
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`Welcome to the Bucky API, youn are listening on port: ${process.env.PORT}`);
+    console.log(`Welcome to the Bucky API, you are listening on port: ${process.env.PORT}`);
 });
 
