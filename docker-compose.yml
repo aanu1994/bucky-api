@@ -1,10 +1,29 @@
 version: '3'
 
 services: 
+    service.bucky.database:
+        image: mysql:5.7
+        volumes: 
+        - service.bucky.database_data:/var/lib/mysql
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: bucky
+            MYSQL_USER: bucky
+            MYSQL_PASSWORD: bucky
+        ports: 
+            - 7002:3306
+
     service.bucky.api:
+        depends_on: 
+            - service.bucky.database
         build: ./service.bucky.api
         volumes: 
         - ./service.bucky.api:/usr/src/app
         - /usr/src/app/node_modules
         ports: 
             - 7003:80
+        env_file: 
+            - ./service.bucky.api/env.dist
+volumes:
+    service.bucky.database_data:
