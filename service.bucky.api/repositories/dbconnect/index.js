@@ -16,6 +16,9 @@ con.connect((err) => {
     console.log("Connected!");
 });
 
+/**
+ * pingDb Method to check the connection with the Database is healthy.
+ */
 const pingDb = () => {
     con.query("SELECT 1;", (err, results) => {
         if (err) throw err;
@@ -23,6 +26,6 @@ const pingDb = () => {
     });
 };
 
-const dbConnect = con;
+const connection = con;
 
-exports = module.exports = { dbConnect, pingDb };
+exports = module.exports = { connection, pingDb };
