@@ -1,3 +1,7 @@
+//This repository has been abstracted in order for all of the other 
+//repositories to be able to utilize the same connection.
+//Saves having to "reinstantiate" a new and exact connection within each repo.
+
 const mysql = require('mysql');
 
 const con = mysql.createConnection({
@@ -15,10 +19,10 @@ con.connect((err) => {
 const pingDb = () => {
     con.query("SELECT 1;", (err, results) => {
         if (err) throw err;
-        console.log(`Connection Healthy`);
+        console.log(`Connection Successful!`);
     });
 };
 
 const dbConnect = con;
 
-exports = module.exports = { dbConnect };
+exports = module.exports = { dbConnect, pingDb };

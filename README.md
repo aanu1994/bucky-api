@@ -34,3 +34,10 @@ This API provides insightful data on the spending habits, credit capabilities an
 }
 ```
 
+**Definitiona**
+`GET service.bucky.api/health`
+
+**Response**
+- `200 OK` On Success
+- `500 INTERNAL ERROR` On Failure of Connection to the DB
+

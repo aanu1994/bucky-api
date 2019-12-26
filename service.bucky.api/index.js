@@ -1,5 +1,6 @@
 const express = require('express');
 const clientService = require('./repositories/client');
+const dbConnect = require('./repositories/dbconnect')
 const app = express();
 
 app.use(express.json());
@@ -11,6 +12,10 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
     res.send('Welcome to the bucky api!!!!');
+});
+
+app.get('/health', (req, res) => {
+    res.send(dbConnect.pingDb());
 });
 
 app.post('/clients', (req, res) => {    
