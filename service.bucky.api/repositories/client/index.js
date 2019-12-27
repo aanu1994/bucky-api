@@ -2,8 +2,15 @@
 const dbconnect = require('../dbconnect');
 const con = dbconnect.connection;
 
+/**
+ * Create client query.
+ */
 const createClientQuery = "INSERT INTO clients (firstname, lastname, dob, address1, address2, city, postcode, country, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+/**
+ * Prepared statement values for the create client statement.
+ * @param {*} body 
+ */
 const createClientPrepareFields = (body) => {
     return [body.firstname, body.lastname, body.dob, body.address.address1, body.address.address2, body.address.city, body.address.postcode, body.address.country, body.email];
 };
@@ -11,7 +18,7 @@ const createClientPrepareFields = (body) => {
 /**
  * Create method to take in request body containing client information
  * required to create a bucky client.
- * @param {} body 
+ * @param {*} body 
  */
 const create = (body) => {
     con.query(createClientQuery, createClientPrepareFields(body), 
@@ -20,4 +27,19 @@ const create = (body) => {
     });
 };
 
-exports = module.exports = { create };
+/**
+ * Fetch client record by client id.
+ * @param number clientId 
+ * @param {*} callback 
+ */
+const fetchClientById = (clientId, callback) => {
+    con.query("SELECT * FROM clients WHERE id = ?;", [clientId], (err, results) => {
+        if (err) {
+            callback(err, null);
+        }
+
+        callback(null, results[0]);
+    });
+};
+
+exports = module.exports = { create, fetchClientById };

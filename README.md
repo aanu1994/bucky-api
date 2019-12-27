@@ -1,7 +1,7 @@
 ### Bucky API
 This API provides insightful data on the spending habits, credit capabilities and more for credit seekers and more
 
-**Definitiona**
+**Definition**
 `POST service.bucky.api/clients`
 
 **Request**

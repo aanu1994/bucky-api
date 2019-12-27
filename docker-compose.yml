@@ -13,7 +13,7 @@ services:
             MYSQL_PASSWORD: bucky
         ports: 
             - 7002:3306
-
+            
     bucky_api:
         container_name: bucky_api
         depends_on: 
@@ -25,6 +25,6 @@ services:
         ports: 
             - 7003:80
         env_file: 
-            - ./service.bucky.api/env.dist
+            - ./service.bucky.api/env
 volumes:
     bucky_db_data:

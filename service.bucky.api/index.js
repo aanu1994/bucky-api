@@ -13,6 +13,9 @@ app.use((req, res, next) => {
     next();
 });
 
+/**
+ * GET. Base endpoint of API, return general welcome message.
+ */
 app.get('/', (req, res) => {
     res.send('Welcome to the bucky api!!!!');
 });
@@ -39,10 +42,25 @@ app.post('/clients', (req, res) => {
 });
 
 /**
+ * GET. Get client details by the client id.
+ */
+app.get('/clients/:clientId', (req, res) => {
+    clientService.fetchClientById(req.params.clientId, (err, data) => {
+        if (data === undefined) {
+            res.status(404).send(
+                {
+                    "result": `Client with id ${req.params.clientId} does not exist`
+                }
+            );
+        }
+        res.send(data);
+    });
+});
+
+/**
  * Use the PORT provided from the environment variable to dictate the port that should
  * be listened to.
  */
 app.listen(process.env.PORT, () => {
     console.log(`Welcome to the Bucky API, you are listening on port: ${process.env.PORT}`);
 });
-
