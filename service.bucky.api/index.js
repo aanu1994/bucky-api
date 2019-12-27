@@ -1,5 +1,6 @@
 const express = require('express');
 const clientService = require('./repositories/client');
+const spendingService = require('./repositories/spending');
 const dbConnect = require('./repositories/dbconnect')
 const app = express();
 
@@ -55,6 +56,54 @@ app.get('/clients/:clientId', (req, res) => {
         }
         res.send(data);
     });
+});
+
+app.post('/clients/spending/:clientId', (req, res) => {
+
+    clientService.fetchClientById(req.params.clientId, (err, data) => {
+        if (data === undefined) {
+            return res.status(404).send(
+                {
+                    "result": `Client ${req.params.clientId} does not exist.`
+                }
+            );
+        }
+
+        spendingService.addClientSpending(req.params.clientId, req.body, (err, data) => {
+            if (data === true) {
+                return res.send(
+                    {
+                        "result": "spending data successfully submitted."
+                    }
+                );
+            }
+    
+            return res.send(
+                {
+                    "result": `Spending data unable to be submitted for client ${req.param.clientId}.`
+                }
+            );
+        });
+    });
+});
+
+app.get('/score/:clientId', (req, res) => {
+    /**
+     * This is where I would obtain the spending data based on the time range provided within the 
+     * request body.
+     */
+
+     /**
+      * With the response from above I would then pass it into the score calculator service
+      */
+
+      /**
+       * The service would provide the bucky for that user within the given time range based on the data we have on them
+       */
+
+       /**
+        * Updates to the clients information can be made and another score requested
+        */
 });
 
 /**

@@ -1,0 +1,16 @@
+const dbconnect = require('../dbconnect');
+const con = dbconnect.connection;
+
+/**
+ * Fetch client record by client id.
+ * @param number clientId 
+ * @param {*} callback 
+ */
+const addClientSpending = (clientId, spendingData, callback) => {
+    con.query("INSERT INTO spending (clientId, amount, date) VALUES (?, ?, ?);", [clientId, spendingData.amount, spendingData.date], (err, results) => {
+        if (err) throw err;
+        callback(null, true);
+    });
+};
+
+exports = module.exports = { addClientSpending };

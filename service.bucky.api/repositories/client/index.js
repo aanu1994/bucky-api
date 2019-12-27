@@ -37,7 +37,6 @@ const fetchClientById = (clientId, callback) => {
         if (err) {
             callback(err, null);
         }
-
         callback(null, results[0]);
     });
 };
