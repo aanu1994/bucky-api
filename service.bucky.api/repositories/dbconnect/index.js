@@ -19,10 +19,13 @@ con.connect((err) => {
 /**
  * pingDb Method to check the connection with the Database is healthy.
  */
-const pingDb = () => {
+const pingDb = (callback) => {
     con.query("SELECT 1;", (err, results) => {
-        if (err) throw err;
-        console.log(`Connection Successful!`);
+        if (err) {
+            callback(err, false);
+        }
+
+        callback(null, true);
     });
 };
 

@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "e70c34e5-7f9b-4aad-acd7-a061ea8cb4ea",
+		"name": "Bucky API",
+		"description": "This contains the collection of API endpoints that communicate with the Bucky API. \nAllowing for the creation of new clients\nFetching of account data\nRequest data insights\nAnd more to come...",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Client",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"Lewis\",\n    \"lastname\": \"Murphy\",\n    \"dob\": \"1988-02-17\",\n    \"email\": \"lewis.murphy81@foobarmail.com\",\n    \"address\": {\n        \"address1\": \"18 Method Road\",\n        \"address2\": \"\",\n        \"city\": \"Swansea\",\n        \"postcode\": \"S18 4JR\",\n        \"country\": \"United Kingdom\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://bucky-api:7003/clients",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients"
+					]
+				},
+				"description": "Creating a Bucky Client, containing a body of required information and responding with the result of the request and the clientAccountId."
+			},
+			"response": []
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://bucky-api:7003/health",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"health"
+					]
+				},
+				"description": "Check database connection health of the bucky api and the bucky db"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://bucky-api:7003/clients/1",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients",
+						"1"
+					]
+				},
+				"description": "Get Client Details by client identifier"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Client Spending Entry",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": \"21.73\",\n    \"date\": \"2019-05-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://bucky-api:7003/clients/1/spending",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients",
+						"1",
+						"spending"
+					]
+				},
+				"description": "Add spending entry for a client that exists in Bucky"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Client Bucky Score",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://bucky-api:7003/clients/1/score/2019-05-01/2019-05-30/month",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients",
+						"1",
+						"score",
+						"2019-05-01",
+						"2019-05-30",
+						"month"
+					]
+				},
+				"description": "Get the bucky score for a given client within a given date range. This factors in their earnings and their spending for that period."
+			},
+			"response": []
+		},
+		{
+			"name": "Add Client Salary",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"salary\": 45000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://bucky-api:7003/clients/salary/1",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients",
+						"salary",
+						"1"
+					]
+				},
+				"description": "Add the salary of the a given client. This can change over time and we will use the most recent one."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Client Spending",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://bucky-api:7003/clients/1/spending/2019-05-01/2019-05-30",
+					"protocol": "http",
+					"host": [
+						"bucky-api"
+					],
+					"port": "7003",
+					"path": [
+						"clients",
+						"1",
+						"spending",
+						"2019-05-01",
+						"2019-05-30"
+					]
+				},
+				"description": "Get the total spend a client has had within a given time range"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

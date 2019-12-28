@@ -6,6 +6,7 @@ services:
         container_name: bucky_db
         volumes: 
         - bucky_db_data:/var/lib/mysql
+        - ./mysql-dump:/docker-entrypoint-initdb.d
         environment: 
             MYSQL_ROOT_PASSWORD: password
             MYSQL_DATABASE: bucky
