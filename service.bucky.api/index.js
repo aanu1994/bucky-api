@@ -1,8 +1,11 @@
 const express = require('express');
-const clientService = require('./repositories/client');
-const spendingService = require('./repositories/spending');
-const dbConnect = require('./repositories/dbconnect')
 const app = express();
+const dbConnect = require('./repositories/dbconnect');
+const clientService = require('./repositories/client');
+const clientIncomeService = require('./repositories/clientIncome');
+const spendingService = require('./repositories/spending');
+const scoreService = require('./services/score');
+
 
 app.use(express.json());
 
@@ -31,15 +34,16 @@ app.get('/health', (req, res) => {
 /**
  * POST. Provide request payload to create client with provided data.
  */
-app.post('/clients', (req, res) => {    
+app.post('/clients', (req, res) => {
     clientService.create(req.body);
 
-    res.status(200).send(JSON.stringify({
-        "result": {
-            "status": "success",
-            "detail": "Client Successfuly Created"
-        }
-    }));
+    res.status(200).send(
+        {
+            "result": {
+                "status": "success",
+                "detail": "Client Successfuly Created"
+            }
+        });
 });
 
 /**
@@ -77,8 +81,8 @@ app.post('/clients/spending/:clientId', (req, res) => {
                     }
                 );
             }
-    
-            return res.send(
+
+            return res.status(500).send(
                 {
                     "result": `Spending data unable to be submitted for client ${req.param.clientId}.`
                 }
@@ -87,23 +91,80 @@ app.post('/clients/spending/:clientId', (req, res) => {
     });
 });
 
-app.get('/score/:clientId', (req, res) => {
-    /**
-     * This is where I would obtain the spending data based on the time range provided within the 
-     * request body.
-     */
+app.post('/clients/salary/:clientId', (req, res) => {
+    clientService.fetchClientById(req.params.clientId, (err, data) => {
+        if (data === undefined) {
+            return res.status(404).send(
+                {
+                    "result": `Client ${req.params.clientId} does not exist.`
+                }
+            );
+        }
 
-     /**
-      * With the response from above I would then pass it into the score calculator service
-      */
+        if (req.body.salary === undefined) {
+            return res.status(400).send(
+                {
+                    "result": 'No Salary Provided.'
+                }
+            );
+        }
 
-      /**
-       * The service would provide the bucky for that user within the given time range based on the data we have on them
-       */
+        clientIncomeService.addClientSalary(req.params.clientId, req.body.salary, (err, data) => {
+            if (data === true) {
+                return res.send(
+                    {
+                        "result": "Salary Added."
+                    }
+                );
+            }
+        });
+    });
+});
 
-       /**
-        * Updates to the clients information can be made and another score requested
-        */
+app.get('/score/:clientId/:fromDate/:toDate/:period', (req, res) => {
+    clientService.fetchClientById(req.params.clientId, (err, clientData) => {
+        if (clientData === undefined) {
+            return res.status(404).send(
+                {
+                    "result": `Client ${req.params.clientId} does not exist.`
+                }
+            );
+        }
+
+        spendingService.getClientSpending(req.params.clientId, req.params.fromDate, req.params.toDate, (err, spend) => {
+            if (spend === undefined) {
+                return res.status(400).send(
+                    {
+                        "result": `Client ${req.params.clientId}: No spending data found.`
+                    }
+                );
+            }
+
+            clientIncomeService.getClientSalary(req.params.clientId, (err, salary) => {
+                if (salary === undefined) {
+                    return res.status(404).send(
+                        {
+                            "result": `No salary found for client ${req.params.clientId}.`
+                        }
+                    );
+                }
+
+                clientData.spend = spend;
+                clientData.salary = salary;
+
+                const score = scoreService.getBuckyScore(clientData, req.params.period);
+                return res.send(
+                    {
+                        "clientId": req.params.clientId,
+                        "score": score,
+                        "period": req.params.period,
+                        "date_from": req.params.fromDate,
+                        "date_to": req.params.toDate
+                    }
+                );
+            });
+        });
+    });
 });
 
 /**

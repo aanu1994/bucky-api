@@ -33,7 +33,7 @@ const create = (body) => {
  * @param {*} callback 
  */
 const fetchClientById = (clientId, callback) => {
-    con.query("SELECT * FROM clients WHERE id = ?;", [clientId], (err, results) => {
+    con.query("SELECT firstname, lastname, DATE_FORMAT(dob,'%Y-%m-%d') as dob FROM clients WHERE id = ?;", [clientId], (err, results) => {
         if (err) {
             callback(err, null);
         }

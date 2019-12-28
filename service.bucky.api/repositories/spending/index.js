@@ -13,4 +13,11 @@ const addClientSpending = (clientId, spendingData, callback) => {
     });
 };
 
-exports = module.exports = { addClientSpending };
+const getClientSpending = (clientId, fromDate, toDate, callback) => {
+    con.query("SELECT SUM(amount) as total FROM spending WHERE clientId = ? AND (date BETWEEN ? AND ?);", [clientId, fromDate, toDate], (err, results) => {
+        if (err) throw err;
+        callback(null, results[0].total);
+    });
+};
+
+exports = module.exports = { addClientSpending, getClientSpending };
