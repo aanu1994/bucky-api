@@ -21,10 +21,10 @@ const createClientPrepareFields = (body) => {
  * @param {*} body 
  */
 const create = (body) => {
-    con.query(createClientQuery, createClientPrepareFields(body), 
+    con.query(createClientQuery, createClientPrepareFields(body),
         (err, results) => {
-        if (err) throw err;
-    });
+            if (err) throw err;
+        });
 };
 
 /**
@@ -41,4 +41,14 @@ const fetchClientById = (clientId, callback) => {
     });
 };
 
-exports = module.exports = { create, fetchClientById };
+const duplicateEmail = (email, callback) => {
+    con.query("SELECT COUNT(*) as count FROM clients WHERE email = ? ;", [email], (err, results) => {
+        if (err) {
+            callback(err, null);
+        }
+
+        callback(null, results[0].count > 0);
+    });
+};
+
+exports = module.exports = { create, fetchClientById, duplicateEmail };

@@ -67,15 +67,26 @@ app.get('/health', (req, res) => {
  * POST. Provide request payload to create client with provided data.
  */
 app.post('/clients', (req, res) => {
-    clientService.create(req.body);
+    clientService.duplicateEmail(req.body.email, (err, result) => {
+        if (result === true) {
+            return res.status(400).send(
+                {
+                    "result": `Email ${req.body.email} already used. Please use a different email address.`
+                }
+            );
+        }
 
-    res.status(200).send(
-        {
-            "result": {
-                "status": "success",
-                "detail": "Client Successfuly Created"
+        clientService.create(req.body);
+
+        return res.status(200).send(
+            {
+                "result": {
+                    "status": "success",
+                    "detail": "Client Successfuly Created"
+                }
             }
-        });
+        );
+    });
 });
 
 /**
