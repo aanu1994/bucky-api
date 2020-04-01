@@ -18,7 +18,11 @@ app.use(express.json());
  * @todo Find a way to abstract the checking of the clientId for every endpoint through the middlewear
  */
 
-// app.use('', (req, res, next) => {
+// app.use((req, res, next) => {
+
+//     console.log("This middleware is now working!");
+//     console.log(req.params);
+
 //     if (req.params.clientId !== undefined) {
 //         verificationService.verifyClient(req.params.clientId, (err, data) => {
 //             console.log("Verification data response: " + data);
@@ -33,6 +37,8 @@ app.use(express.json());
 //             next();
 //         });
 //     }
+
+//     next();
 // });
 
 /**
