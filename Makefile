@@ -14,3 +14,5 @@ login-bucky-db: ## Log into the bucky_db container
 
 push-to-aws: ## Upload built api to ec2
 	scp -i ~/Development/ec2key.pem   ec2-user@\[2001:db8:1234:1a00:9691:9503:25ad:1761\]:~
+
+	
